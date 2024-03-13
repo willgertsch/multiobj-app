@@ -11,8 +11,8 @@ page2 <- tagList(
   selectInput(
     inputId = 'model_selector',
     label = NULL,
-    choices = c('Logistic', 'Weibull', 'Log-logistic', 'Multistage 3'),
-    selected = 'Log-logistic'
+    choices = c('4 parameter log-logistic'),
+    selected = '4 parameter log-logistic'
   ),
   uiOutput('model_formula_display_page2')
 )
@@ -25,31 +25,31 @@ page3 <- tagList(
       numericInput(
         'theta1',
         'Theta 1',
-        value = 0.02461,
+        value = 0.084950,
         step = 0.1
       ),
       numericInput(
         'theta2',
         'Theta 2',
-        -2.390,
+        -11.093067,
         step = 0.1
       ),
       numericInput(
         'theta3',
         'Theta 3',
-        1,
+        12.157339,
         step = 0.1
       ),
       numericInput(
         'theta4',
         'Theta 4',
-        0,
+        0.913343,
         step = 0.1
       ),
       numericInput(
         'dose_limit',
         'Dose limit',
-        10,
+        20,
         min = 0.01,
         step = 0.5
       )

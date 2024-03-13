@@ -8,6 +8,7 @@ M.nonlinear = function(x, w, theta, grad_fun) {
 
   IM = 0
   for (i in 1:length(x)) {
+
     IM_i = w[i] * grad_fun(x[i], theta) %*% t(grad_fun(x[i],theta))
     IM = IM + IM_i
   }
@@ -16,6 +17,7 @@ M.nonlinear = function(x, w, theta, grad_fun) {
 
 # return a list of information matrices
 # treats theta as a matrix
+# this is used when plotting the equivalence theorem test
 M.nonlinear.list = function(x, w, theta, grad_fun) {
 
   M.list = list()
@@ -33,6 +35,7 @@ M.nonlinear.exact = function(x, theta, grad_fun) {
 
   IM = 0
   for (i in 1:length(x)) {
+
     IM_i = grad_fun(x[i], theta) %*% t(grad_fun(x[i],theta))
     IM = IM + IM_i
   }

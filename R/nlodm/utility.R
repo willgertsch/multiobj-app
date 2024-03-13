@@ -171,12 +171,6 @@ model_display = function(model) {
     "$$P(d) = \\theta_1 + (1-\\theta_1)(1-\\exp(-\\theta_2 d))$$"
   else if (model == "Weibull")
     "$$P(d) = \\theta_1 + (1-\\theta_1)(1-\\exp(-\\theta_3 d^{\\theta_2}))$$"
-  else if (model == "Mixture multistage")
-    "$$P(d) = \\theta_6 \\left[1 - \\exp(-\\theta_1-\\theta_2 d - \\theta_3 d^2) \\right] + (1-\\theta_6)\\left[1 - \\exp(-\\theta_1 - \\theta_4 d - \\theta_5 d^2) \\right]$$"
-  else if (model == "Box-Cox Weibull")
-    "$$P(d)=1-\\exp \\left[ -\\exp \\left(\\theta_1 + \\theta_2 \\frac{d^{\\theta_3}-1}{\\theta_3}\\right)\\right]$$"
-  else if (model == "Hill")
-    "$$P(d) = \\theta_1 + \\frac{\\theta_2 - \\theta_2\\theta_1}{1+\\exp(-\\theta_3 - \\theta_4 d)}$$"
   else if (model == "Multistage 1")
     "$$P(d) = \\theta_1 + (1-\\theta_1)(1 - \\exp(-\\theta_2 d))$$"
   else if (model == "Multistage 2")
@@ -188,7 +182,7 @@ model_display = function(model) {
   else if (model == "Log-probit")
     "$$P(d) = \\theta_1 + (1-\\theta_1) \\phi(\\theta_2 + \\theta_3 * \\log(d))$$"
   else if (model == "4 parameter log-logistic")
-    "$$P(d) = \\theta_1 + \\frac{(\\theta_4 - \\theta_1)}{1 + \\exp(-\\theta_2 - \\theta_3 \\log(d))}$$"
+    "$$P(d) = \\theta_1 + \\frac{(\\theta_4 - \\theta_1)}{1 + \\exp(\\theta_2(\\log(d)-\\log(\\theta_3)))}$$"
   else
     "Model not supported"
 
@@ -227,7 +221,7 @@ display_example_param = function(model) {
   else if (model == "Multistage 3")
     "EX: \\(\\theta\\) = (0.05307, 0.04929, 0, 0)"
   else if (model == '4 parameter log-logistic')
-    'EX: \\(\\theta\\) = (1.01, -2.93, 0.54, 140.09)'
+    'EX: \\(\\theta\\) = (0.084950, -11.093067 , 12.157339, 0.913343)'
   else
     "EX: \\(\\theta\\) = "
 
@@ -279,7 +273,7 @@ plot_response = function(model, theta, limit, log_dose = F) {
   else if (model == "Log-probit")
     y = theta[1] + (1-theta[1])*pnorm(theta[2] + theta[3]*log(x))
   else if (model == "4 parameter log-logistic")
-    y = theta[1] + (theta[4] - theta[1])/(1 + exp(-theta[2] - theta[3]*log(x)))
+    y = theta[1] + (theta[4] - theta[1])/(1 + exp(theta[2]*(log(x)-log(theta[3]))))
   else
     y = x
 

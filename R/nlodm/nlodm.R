@@ -36,6 +36,7 @@ nlodm = function(
     exact_digits = 4
 ) {
 
+
   # get gradient function
   grad_fun = get_grad(model, grad_fun)
 
