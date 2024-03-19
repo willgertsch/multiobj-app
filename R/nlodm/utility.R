@@ -62,7 +62,7 @@ get_obj = function(obj) {
     return(obj.c)
   else if (obj == 'c_e')
     return(obj.c_e)
-  else if (obj.bmd == 'bmd')
+  else if (obj == 'bmd')
     return(obj.bmd)
   else
     stop('get_obj: Objective not defined.')
