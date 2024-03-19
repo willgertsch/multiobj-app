@@ -3,7 +3,7 @@ page1 <- tagList(
   titlePanel("Design criteria"),
   checkboxInput('obj_checkbox_D', 'D', value = TRUE),
   checkboxInput('obj_checkbox_A', 'A', value = FALSE),
-  checkboxInput('obj_checkbox_BMD', 'BMD', value = TRUE)
+  checkboxInput('obj_checkbox_BMD', 'BMD', value = FALSE)
 
 )
 page2 <- tagList(
@@ -51,7 +51,7 @@ page3 <- tagList(
       numericInput(
         'dose_limit',
         'Dose limit',
-        20,
+        5,
         min = 0.01,
         step = 0.5
       )
@@ -67,7 +67,7 @@ page4 = tagList(
   titlePanel('Algorithm options'),
   selectInput(
     'method',
-    'Method',
+    'Multi-objective method',
     choices = c('compound', 'pareto'),
     selected = 'pareto'
   ),

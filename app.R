@@ -48,13 +48,14 @@ server <- function(input, output, session) {
   })
 
   # reactive objects for result
-  results = reactiveValues(pareto_data = NULL)
+  results = reactiveValues(pareto_data = NULL, eq_plot = NULL, design = NULL)
 
   # find design button
   observeEvent(input$done, {
 
     # browser()
     selected_obj = c(input$obj_checkbox_D, input$obj_checkbox_A, input$obj_checkbox_BMD)
+    obj_names = c('D', 'A', 'c_e')[selected_obj]
     grad = grad_selector(input$model_selector)
     grad_funs = list(grad, grad, grad)[selected_obj]
     obj_funs = list(obj.D, obj.A, obj.c_e)[selected_obj]
@@ -67,6 +68,37 @@ server <- function(input, output, session) {
     # switch between single and multi-objective
     if (sum(selected_obj) == 1) {
 
+      result = nlodm(
+        model = NULL,
+        grad_fun = grad_funs[[1]],
+        obj = obj_names[1],
+        theta = theta,
+        prior_weights = c(1),
+        bound = input$dose_limit,
+        pts = input$design_pts,
+        algorithm = 'DE',
+        swarm = input$swarm,
+        iter = input$maxIter,
+        seed = NULL,
+        bmd_type = 'added',
+        risk = 0.1,
+        lambda = 0.5,
+        c = NULL,
+        exact = input$exact,
+        exact_digits = 4
+      )
+
+      # save results to reactive data structure
+      results$eq_plot = result$plot
+      results$design = result$design
+
+      showModal(modalDialog(
+        title = 'Results',
+        'Single objective design found using Differential Evolution:',
+        plotOutput("eq_plot"),
+        verbatimTextOutput('single_obj_out'),
+        modalButton("Done"),
+        footer = NULL))
     }
     else if (sum(selected_obj) > 1) {
       # call main function
@@ -79,7 +111,7 @@ server <- function(input, output, session) {
         bound = input$dose_limit,
         pts = input$design_pts,
         swarm = input$swarm,
-        maxiter = 50,
+        maxiter = input$maxIter,
         verbose = T,
         exact = input$exact
       )
@@ -112,6 +144,16 @@ server <- function(input, output, session) {
 
 
   })
+
+  # equivalence theorem plot in modal
+  output$eq_plot = renderPlot({
+    results$eq_plot
+  })
+
+  # single objective design output in modal
+  output$single_obj_out = renderPrint(
+    results$design
+  )
 
   # Render the data table in modal
   output$results_table <- renderTable({
@@ -167,7 +209,7 @@ server <- function(input, output, session) {
         input$theta4,
         '<br>Dose limit:',
         input$dose_limit,
-        '<br>Method:',
+        '<br>Multi-objective method:',
         input$method,
         '<br>Dose levels:',
         input$design_pts,
