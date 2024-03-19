@@ -64,51 +64,53 @@ server <- function(input, output, session) {
     params = list(c(), c(), bmd_grad(0.1, theta))[selected_obj]
 
 
-    #grad_funs = list(grad.loglogistic, grad.loglogistic)
-    #obj_funs = list(obj.D, obj.c_e)
-    # bmd_grad = get_bmd_grad("Log-logistic", 'added')
-    # theta = c(0.02461, -2.390, 1)
-    # thetas = list(
-    #   theta,
-    #   theta
-    # )
-    # params = list(
-    #   c(),
-    #   bmd_grad(0.1, theta)
-    # )
+    # switch between single and multi-objective
+    if (sum(selected_obj) == 1) {
+
+    }
+    else if (sum(selected_obj) > 1) {
+      # call main function
+      result = multi_obj(
+        grad_funs,
+        obj_funs,
+        thetas,
+        params,
+        type = input$method,
+        bound = input$dose_limit,
+        pts = input$design_pts,
+        swarm = input$swarm,
+        maxiter = 50,
+        verbose = T,
+        exact = input$exact
+      )
+
+      # process results
+      results$pareto_data = extract_front(result, input$exact)
 
 
-    # call main function
-    result = multi_obj(
-      grad_funs,
-      obj_funs,
-      thetas,
-      params,
-      type = input$method,
-      bound = input$dose_limit,
-      pts = input$design_pts,
-      swarm = input$swarm,
-      maxiter = 50,
-      verbose = T,
-      exact = input$exact
-    )
+      showModal(modalDialog(
+        title = 'Results',
+        fluidRow(
+          plotOutput("results_plot")
+        ),
+        h3('Pareto optimal designs'),
+        fluidRow(
+          tableOutput("results_table")
+        ),
 
-    # process results
-    results$pareto_data = extract_front(result, input$exact)
+        modalButton("Done"),
+        footer = NULL))
+    }
+    else if (sum(selected_obj) == 0) {
+      showModal(modalDialog(
+        title = 'Results',
+        "Please select at least 1 objective function.",
+
+        modalButton("Done"),
+        footer = NULL))
+    }
 
 
-    showModal(modalDialog(
-      title = 'Results',
-      fluidRow(
-        plotOutput("results_plot")
-      ),
-      h3('Pareto optimal designs'),
-      fluidRow(
-        tableOutput("results_table")
-      ),
-
-      modalButton("Done"),
-      footer = NULL))
   })
 
   # Render the data table in modal

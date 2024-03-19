@@ -11,8 +11,10 @@ page2 <- tagList(
   selectInput(
     inputId = 'model_selector',
     label = NULL,
-    choices = c('4 parameter log-logistic'),
-    selected = '4 parameter log-logistic'
+    # choices = c('4 parameter log-logistic'),
+    # selected = '4 parameter log-logistic'
+    choices = c('Log-logistic', 'Logistic', 'Weibull', 'Hill'),
+    selected = 'Log-logistic'
   ),
   uiOutput('model_formula_display_page2')
 )
