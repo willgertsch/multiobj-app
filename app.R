@@ -61,7 +61,7 @@ server <- function(input, output, session) {
     obj_funs = list(obj.D, obj.A, obj.c_e)[selected_obj]
     theta = c(input$theta1, input$theta2, input$theta3, input$theta4)
     thetas = list(theta, theta, theta)[selected_obj]
-    bmd_grad = get_bmd_grad(input$model_selector, 'added')
+    bmd_grad = get_bmd_grad(input$model_selector, 'extra')
     params = list(c(), c(), bmd_grad(0.1, theta))[selected_obj]
 
 
